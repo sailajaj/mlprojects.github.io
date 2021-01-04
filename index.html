@@ -1,50 +1,102 @@
-<HTML>
+<!DOCTYPE html>
+<html>
+<body>
+
 <h3 class="graf graf--h3" name="c197">Keyword Trends</h3>
+
 <p class="graf graf--p" name="7314">Keyword analysis of search terms and their effective use in site analysis have been popular with many interesting publications supporting them. Typically, businesses process these keywords to analyze user interests, popular categories, including keyword trend analysis. Most trend analysis are fairly complicated with varied language sets and are often analyzed as trends within a sub-set of categories. What we questioned was, to find a computationally simple process that could show us trends by country. A trend by location could reveal events/incidents that could explain variance of usage.</p>
+
 <p class="graf graf--p" name="4d90">Keywords and its intent analysis is very specific to the site and its use cases. In this article, we are not exploring those details, rather, suggesting a generic way of spotting trends within streams of keyword. As an example, Google offers a daily view of the trending terms: <a class="markup--anchor markup--p-anchor" data-href="https://trends.google.com/trends/trendingsearches/daily?geo=US" href="https://trends.google.com/trends/trendingsearches/daily?geo=US" rel="noopener" target="_blank">Google Daily Trends</a> . Here is a trend of search term &lsquo;<em class="markup--em markup--p-em">Idaho Earthquake</em>&rsquo; that google shows. If your business, in Idaho, is showing a behavior that is different from the norm, it is likely related to this event; a suggestion that can be revealed by analyzing keyword trends.</p>
+
 <figure class="graf graf--figure" name="1229"><img class="graf-image" data-image-id="1*wI_Dx-bp5j3Re7kvNw35sw.png" data-width="1888" data-height="626" src="https://cdn-images-1.medium.com/max/1600/1*wI_Dx-bp5j3Re7kvNw35sw.png"></figure>
+
 <h3 class="graf graf--h3" name="9cfd">Type of&nbsp;Trends</h3>
+
 <p class="graf graf--p" name="a3af">Based on the type of data one collects, a keyword trend has different utilities. Here we identified simple three simple use cases to work with&nbsp;: 1. keywords that are always-trending, 2. keywords from spammers, 3. keywords from a real trend.</p>
+
 <p class="graf graf--p" name="d832">There are popular keywords that are always trending:</p>
+
 <figure class="graf graf--figure" name="7e0c"><img class="graf-image" data-image-id="1*61zbblZwKPC53b3Ue1GgTw.png" data-width="1860" data-height="732" alt="Popular keywords that have a daily trend" src="https://cdn-images-1.medium.com/max/1600/1*61zbblZwKPC53b3Ue1GgTw.png">
-    <figcaption class="imageCaption">Keywords that have a daily&nbsp;trend</figcaption>
+
+<figcaption class="imageCaption">Keywords that have a daily&nbsp;trend</figcaption>
+
 </figure>
+
 <p class="graf graf--p" name="23b3">There are spammers that cause a trend for a short burst</p>
+
 <figure class="graf graf--figure" name="ba5f"><img class="graf-image" data-image-id="1*DP-xFv1XS-58L31bcvxfXg.png" data-width="1136" data-height="394" src="https://cdn-images-1.medium.com/max/1600/1*DP-xFv1XS-58L31bcvxfXg.png"></figure>
+
 <p class="graf graf--p" name="3f8a">And, then there are real trends that can give some meaningful insight:</p>
+
 <figure class="graf graf--figure" name="493b"><img class="graf-image" data-image-id="1*SYXyMiLFyFYOdbDdHP3aHA.png" data-width="1136" data-height="394" src="https://cdn-images-1.medium.com/max/1600/1*SYXyMiLFyFYOdbDdHP3aHA.png">
-    <figcaption class="imageCaption">Keywords that have a clear&nbsp;trend</figcaption>
+
+<figcaption class="imageCaption">Keywords that have a clear&nbsp;trend</figcaption>
+
 </figure>
+
 <h3 class="graf graf--h3" name="117e">Algorithm</h3>
+
 <p class="graf graf--p" name="74a9">To identify patterns in the keywords we are evaluating the data by the hour. A short spike (as shown in blue below) is likely a spammer. A long term pattern is a popular term. A query term that is trending in the most recent hours (as shown in pink below) is a trend worth identifying.</p>
+
 <figure class="graf graf--figure" name="8435"><img class="graf-image" data-image-id="1*YLuOSlOTcBLhHgsn6QVO1A.png" data-width="413" data-height="99" src="https://cdn-images-1.medium.com/max/1600/1*YLuOSlOTcBLhHgsn6QVO1A.png"></figure>
+
 <p class="graf graf--p" name="ae20">For calculation of hourly search trends, we calculate query count by keyword, and derive an RMSE score (Root mean square error) for the window, using a formula that weighs the trend for the current window more heavily.&nbsp;</p>
+
 <p class="graf graf--p" name="3dcf">When we weight the current window more heavily than the other, the spam trends with time will have a lower RMSE score. The long term popular terms will have a consistent RMSE score with time, making it easy to evaluate and remove.</p>
+
 <figure class="graf graf--figure" name="8ec2"><img class="graf-image" data-image-id="1*2XS1dBG5ndOCdruMeur1ZQ.png" data-width="708" data-height="84" src="https://cdn-images-1.medium.com/max/1600/1*2XS1dBG5ndOCdruMeur1ZQ.png"></figure>
+
 <figure class="graf graf--figure" name="af0e"><img class="graf-image" data-image-id="1*j7djGRhznGKL1Fph3phd-w.png" data-width="428" data-height="164" src="https://cdn-images-1.medium.com/max/1600/1*j7djGRhznGKL1Fph3phd-w.png"></figure>
+
 <h3 class="graf graf--h3" name="ab57">Data Preparation</h3>
+
 <h4 class="graf graf--h4" name="bd37">Data Cleanup</h4>
+
 <p class="graf graf--p" name="2809">First step in this process is to clean the search terms by removing stop words and adult keywords.</p>
+
 <h4 class="graf graf--h4" name="91ba">Grouping of&nbsp;Terms</h4>
+
 <p class="graf graf--p" name="0a44">Second is to group similar keywords. More often, trends follow a collective theme that can be best identified by grouping the terms. The grouping is based on calculating cosine distance between any two search-terms and then the pairs with cosine similarity higher than a threshold (currently 0.5) are grouped together. The basics steps involved in calculating cosine similarity are:</p>
+
 <ol class="postList">
-    <li class="graf graf--li" name="b785">N-grams- It is a way of breaking text into smaller chunks where N is the chunk size. This allows for more overlap between strings where there are spelling mistakes or just grammar differences.</li>
-    <li class="graf graf--li" name="6fa4">TF-IDF- It is a way of converting words into numerical vectors required for calculating distances.</li>
-    <li class="graf graf--li" name="5af9">Cosine similarity- Calculate the cosine similarity between pairs of vectors.</li>
-    <li class="graf graf--li" name="a5f3">Group Map- Utilize the cosine similarity to create a group-map between search-term and groups.</li>
-    <li class="graf graf--li" name="ec99">Group Naming- Create more reasonable groups using most frequent words from the search terms within a group.</li>
+
+<li class="graf graf--li" name="b785">N-grams- It is a way of breaking text into smaller chunks where N is the chunk size. This allows for more overlap between strings where there are spelling mistakes or just grammar differences.</li>
+
+<li class="graf graf--li" name="6fa4">TF-IDF- It is a way of converting words into numerical vectors required for calculating distances.</li>
+
+<li class="graf graf--li" name="5af9">Cosine similarity- Calculate the cosine similarity between pairs of vectors.</li>
+
+<li class="graf graf--li" name="a5f3">Group Map- Utilize the cosine similarity to create a group-map between search-term and groups.</li>
+
+<li class="graf graf--li" name="ec99">Group Naming- Create more reasonable groups using most frequent words from the search terms within a group.</li>
+
 </ol>
+
 <h4 class="graf graf--h4" name="05de">Separate always-trending terms</h4>
+
 <p class="graf graf--p" name="92ac">We filter always-trending queries from the data. The logic is to identify always-trending queries <em class="markup--em markup--p-em">by finding any search-term which has a frequency higher than 70% over the last 30 days is considered as always-trending</em>.</p>
+
 <h3 class="graf graf--h3" name="c4bc">Trend Analysis</h3>
+
 <h4 class="graf graf--h4" name="9bee">Hourly Trend</h4>
+
 <p class="graf graf--p" name="255e">We are using a rolling window to identify trends. Using RMSE score rate the <em class="markup--em markup--p-em">groups&nbsp;</em>(<em class="markup--em markup--p-em">always-trending groups or newly identified groups</em>) in the current hour. The lower the score the higher the ranking. The optimal window size turned out to be 6 hours, meaning that every hour we look back 6 hours to calculate the hourly trends.</p>
+
 <h4 class="graf graf--h4" name="0813">Daily Trends</h4>
+
 <p class="graf graf--p" name="0a3f">Daily trends are calculated from the hourly-trends data. For daily trends, we look back at previous 24 window-slices and pick those with hourly ranks higher than 30 and then rank them based on a weighted score of (Frequency x Query Counts). The search-term/group with higher weighted score being considered as trending over the day.</p>
+
 <h3 class="graf graf--h3" name="d267">Results</h3>
+
 <p class="graf graf--p" name="f74f">Grouping of our&nbsp;</p>
+
 <figure class="graf graf--figure" name="8128"><img class="graf-image" data-image-id="1*zDUFvfEfUkmKouC0Xw_bbA.png" data-width="476" data-height="1222" src="https://cdn-images-1.medium.com/max/1600/1*zDUFvfEfUkmKouC0Xw_bbA.png"></figure>
+
 <p class="graf graf--p" name="5c9d">Trends for 12/25 :&nbsp;</p>
+
 <figure class="graf graf--figure" name="9213"><img class="graf-image" data-image-id="1*s-6VVkyv8oQ0k4TzZ9UcQw.png" data-width="934" data-height="206" src="https://cdn-images-1.medium.com/max/1600/1*s-6VVkyv8oQ0k4TzZ9UcQw.png"></figure>
+
 <p class="graf graf--p graf--empty" name="e356"><br></p>
-</HTML>
+
+</body>
+</html>
